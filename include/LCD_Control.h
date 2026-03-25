@@ -1,53 +1,45 @@
 #ifndef LCD_CONTROL_H
 #define LCD_CONTROL_H
 
-#include <Arduino.h>
 #include <Wire.h>
+#include <vector>
 #include <hd44780.h>
 #include <hd44780ioClass/hd44780_I2Cexp.h>
-#include <vector>
+
+#define DEFAULT_COLS 16
+#define DEFAULT_ROWS 2
 
 class LCD_Control {
 public:
-    static const int DEFAULT_ROWS = 2;
-    static const int DEFAULT_COLS = 16;
-    
-    enum class Align : uint8_t { Left, Center, Right };
-    
-    // Device class definition - wrapper for hd44780_I2Cexp with additional properties
-    class Device : public hd44780_I2Cexp {
-    private:
-        uint8_t rows;
-        uint8_t cols;
-        
-    public:
-        Device(hd44780_I2Cexp* lcd, uint8_t c, uint8_t r) 
-            : hd44780_I2Cexp(*lcd), rows(r), cols(c) {}
-        
-        uint8_t getRows() const { return rows; }
-        uint8_t getCols() const { return cols; }
-        
+    enum Align { Left, Center, Right };
+
+    struct Device {
+        hd44780_I2Cexp* lcd;
+        uint8_t cols, rows;
+
+        Device(hd44780_I2Cexp* l, uint8_t c, uint8_t r) : lcd(l), cols(c), rows(r) {}
+
+        void clear() { lcd->clear(); }
+        void setCursor(uint8_t col, uint8_t row) { lcd->setCursor(col, row); }
+        void print(const String& s) { lcd->print(s); }
+        int getProp(hd44780_I2Cexp::I2CexpProp prop) { return lcd->getProp(prop); }
+
         bool printAligned(uint8_t row, const String &text, Align align);
-        int getProp(I2CexpProp prop) const { return const_cast<Device*>(this)->hd44780_I2Cexp::getProp(prop); }
     };
-    
-    // Constructor/Destructor
+
     LCD_Control();
     ~LCD_Control();
-    
-    // Public methods
+
+    std::vector<Device> getLcds();
     void clearAll();
     Device* getLcdByAddress(uint8_t address);
     void labelDisplays();
-    std::vector<Device> getLcds();
-    
+
 private:
     void initDevices();
-    
-    std::vector<Device> lcds;
-    std::vector<hd44780_I2Cexp *> devices;
-};
 
-void fatalError(int ecode);
+    std::vector<Device> lcds;
+    std::vector<hd44780_I2Cexp*> devices;
+};
 
 #endif

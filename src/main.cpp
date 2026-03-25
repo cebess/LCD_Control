@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "LCD_Control.h"
+#include <LCD_Control.h>
 
 // Pointer to the controller instance
 LCD_Control *lcdctrl = nullptr;
@@ -11,7 +11,7 @@ void setup()
   while (!Serial) {
     delay(10);
     Serial.println("Waiting for Serial...");
-  } ;
+  };
   Serial.println("System Initializing...");
 
   // Create the LCD controller instance
@@ -20,6 +20,7 @@ void setup()
   Serial.println("Initialization complete.");
   Serial.println(String(lcdctrl->getLcds().size()) + " LCD(s) detected.");
 }
+
 void loop()
 {
   static unsigned long lastsecs = 0;
