@@ -1,8 +1,10 @@
 #include <Arduino.h>
 #include <LCD_Control.h>
 
+#ifndef UNIT_TEST // this is to prevent conflicts with main when unit testing, since the test files also have a setup() and loop()
 // Pointer to the controller instance
 LCD_Control *lcdctrl = nullptr;
+
 
 void setup()
 {
@@ -42,3 +44,4 @@ void loop()
     }
   }
 }
+#endif
