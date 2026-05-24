@@ -138,6 +138,26 @@ void test_device_println() {
     }
 }
 
+void test_device_println_scrolling() {
+    TEST_ASSERT_NOT_NULL(lcdctrl);
+    auto lcds = lcdctrl->getLcds();
+    if (lcds.size() > 0) {
+        lcds[0].clear();
+        lcds[0].setCursor(0, 0);
+        lcds[0].println("line1");
+        String firstLine = lcds[0].getText(0);
+        TEST_ASSERT_EQUAL_STRING("line1", firstLine.c_str());
+        lcds[0].println("line2");
+        String secondLine = lcds[0].getText(1);
+        TEST_ASSERT_EQUAL_STRING("line2", secondLine.c_str());
+        lcds[0].println("line3");
+        firstLine = lcds[0].getText(0);
+        secondLine = lcds[0].getText(1);
+        TEST_ASSERT_EQUAL_STRING("line2", firstLine.c_str());  
+        TEST_ASSERT_EQUAL_STRING("line3", secondLine.c_str());
+    }
+}
+
 // Test: Device getText from buffered display rows
 void test_device_getText() {
     TEST_ASSERT_NOT_NULL(lcdctrl);
@@ -257,7 +277,9 @@ void setup() {
     delay(500);
     RUN_TEST(test_device_printAligned);
     delay(500);
+    RUN_TEST(test_device_println_scrolling);
     RUN_TEST(test_destructor);
+
     UNITY_END();
 }
 
