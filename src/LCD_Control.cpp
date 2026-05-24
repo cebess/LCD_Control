@@ -310,7 +310,7 @@ void LCD_Control::labelDisplays()
     {
         int addr = lcds[n].getProp(hd44780_I2Cexp::Prop_addr);
         lcds[n].clear();
-        lcds[n].printAligned(0, "LCD #" + String(n) + " ADDR 0x" + String(addr, HEX), Align::Left);
+        lcds[n].printAligned(0, "LCD #" + String(n) + " ADDR 0x" + String(addr, HEX));
     }
 }
 

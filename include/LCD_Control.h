@@ -127,7 +127,7 @@ public:
 
         // Print text on the specified row, aligned left/center/right.
         // The row is cleared first so the full line is overwritten.
-        bool printAligned(uint8_t row, const String &text, Align align);
+        bool printAligned(uint8_t row, const String &text, Align align = Left);
     };
 
     // Scan the I2C bus for supported LCD expander addresses and initialize devices.
